@@ -2,7 +2,6 @@ import { useState } from "react";
 import DataFetcher from "./components/DataFetcher";
 import ScrollLoader from "./components/ScrollLoader";
 import ProductTable from "./components/ProductTable";
-import "./App.css";
 
 export default function App() {
   const [data, setData] = useState<any[]>([]);
@@ -10,8 +9,8 @@ export default function App() {
   const [loading, setLoading] = useState(false);
 
   return (
-    <div className="container">
-      <h2>Infinite Products Table</h2>
+    <div className="w-full bg-[#f4f6f8] font-[arial] p-6">
+      <h2 className="text-center text-2xl">Infinite Products Table</h2>
 
       <DataFetcher setData={setData} />
 
@@ -24,7 +23,7 @@ export default function App() {
 
       <ProductTable data={data} visible={visible} />
 
-      {loading && <p className="loading">Loading...</p>}
+      {loading && <p className="text-center font-bold my-5">Loading...</p>}
     </div>
   );
 }
