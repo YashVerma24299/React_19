@@ -33,9 +33,9 @@ export default function App() {
           <Route path="/login" element={<Login />} />
 
           {/* Route Prefixes */}
-          <Route path="/pefixes1">
-            <Route path="/pefixes1/prefixes2">
-              <Route path="/pefixes1/prefixes2/about" element={<About />} />
+          <Route path="pefixes1">
+            <Route path="prefixes2">
+              <Route path="about" element={<About />} />
             </Route>
           </Route>
           
