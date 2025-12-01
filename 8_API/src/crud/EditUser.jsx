@@ -1,29 +1,17 @@
 import React from "react";
 import { useState } from "react";
-import { useEffect } from "react";
-import { useParams } from "react-router";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
+
 
 export default function EditUser() {
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    age: "",
-  });
   const { id } = useParams();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  async function getData() {
-    const url = `http://localhost:3000/users/${id}`;
-    let response = await fetch(url);
-    response = await response.json();
-    setData(response);
-  }
-  console.log(data);
+  const {state} = useLocation();
+  const [data, setData] = useState({
+    name: state?.name || "",
+    email: state?.email || "",
+    age: state?.age || "",
+  });
 
   function handleChange(e) {
     const { name, value } = e.target;

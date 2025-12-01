@@ -91,7 +91,7 @@ export default function GetData() {
                       Delete
                     </button>
                     <button
-                      onClick={() => navigate(`/edit/${user.id}`)}
+                      onClick={() => navigate(`/edit/${user.id}`,{state: user})}
                       className="bg-gray-500 text-black py-1 px-1 rounded hover:bg-gray-600"
                     >
                       Edit
