@@ -1,0 +1,234 @@
+1. WHY DO WE PASS HEADERS IN AXIOS?
+
+->When you send data to a server, you must tell the server:
+    What type of data you’re sending
+    Are you allowed to access this API?
+    Which user is logged in?
+    Do you need authentication?
+
+->Headers carry additional information.
+{
+  "Content-Type": "application/json",
+  "Authorization": "Bearer (YOUR_TOKEN_DETAILS)",
+  "Accept": "application/json",
+}
+
+
+
+
+2. WHAT IS CONTENT-TYPE?
+
+->It tells the backend what kind of data you are sending.
+->Most common:
+    Content-Type: application/json
+->Meaning:
+    “Hey backend, I am sending JSON data.”
+
+->EXAMPLE
+    axios.post("/login", user, {
+        headers: { "Content-Type": "application/json" }
+    });
+
+
+
+
+3. WHAT IS AUTHORIZATION HEADER?
+
+->Used to send JWT Token or API key.
+->Why needed?
+    To identify the user.
+
+->When you login → backend sends token
+
+->When you call protected API → you send that token back (“proof of identity”).
+
+
+
+
+4. WHAT IS TIMEOUT?
+
+->If backend is slow, you don’t want your UI to wait forever.
+->EXAMPLE
+    const api = axios.create({
+        baseURL: "...",
+        timeout: 5000, // 5 sec
+    });
+If API takes more than 5 sec → axios throws error
+
+
+
+
+5. WHAT IS config IN AXIOS?
+->Axios internally creates a config object.
+
+->This config object contains EVERYTHING about that request:
+URL
+Method (GET, POST, PUT...)
+Headers
+Timeout
+Body / Data
+Params
+Base URL
+Authentication
+Interceptor flags
+Transform functions
+
+->It is like a package of full request details.
+
+->EXAMPLE
+    If you run:  api.get("/posts");
+    Axios will create this config:
+    {
+        baseURL: "https://jsonplaceholder.typicode.com",
+        url: "/posts",
+        method: "get",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: "Bearer YOUR_TOKEN"   // added by interceptor
+        },
+        timeout: 5000,
+        data: undefined,
+        params: undefined,
+    }
+
+
+
+
+6. WHAT ARE INTERCEPTORS?
+
+->Interceptors = middleware
+
+->These run before a request is sent, and after a response arrives.
+
+1️⃣ Request Interceptor:
+    Add token, modify headers, show loader
+
+✔ Request Interceptor Example
+    api.interceptors.request.use((config) => {
+        const token = localStorage.getItem("token");
+
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+
+        return config;
+    });
+Meaning:
+➡ Before EVERY API call, add token automatically.
+
+
+2️⃣ Response Interceptor:
+    Handle errors globally, refresh token, hide loader
+
+✔ Response Interceptor Example
+    api.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            if (error.response?.status === 401) {
+            console.log("Token expired!");
+            }
+            return Promise.reject(error);
+        }
+    );
+
+Meaning:
+➡ If backend says "unauthorized," we handle it once globally.
+
+
+
+
+7. Axios Errors
+->Axios errors come in 4 types:
+1️⃣ Timeout error → API slow / stuck
+2️⃣ Network error → No internet / CORS / DNS fail
+3️⃣ Server error → 5xx errors
+4️⃣ Client error → 4xx errors
+
+-> Example
+    api.interceptors.response.use(
+        (response) => response,
+        (error) => {
+
+            // TIMEOUT ERROR
+            if (error.code === "ECONNABORTED") {
+            alert("⏳ Server took too long to respond. Please try again!");
+            return Promise.reject({ message: "Timeout: Server not responding" });
+            }
+
+            // NO INTERNET / NETWORK ERROR
+            if (!error.response) {
+            alert("📡 No internet or server unreachable!");
+            return Promise.reject({ message: "Network Error" });
+            }
+
+            // STATUS BASED ERRORS
+            if (error.response.status === 400) {
+            alert("❌ Bad Request! Please check your input.");
+            }
+
+            if (error.response.status === 401) {
+            alert("🔐 Unauthorized! Your session expired.");
+            }
+
+            if (error.response.status === 403) {
+            alert("🚫 Forbidden! You don't have permission.");
+            }
+
+            if (error.response.status === 404) {
+            alert("🔍 Resource not found!");
+            }
+
+            if (error.response.status === 500) {
+            alert("💥 Server crashed! Try again later.");
+            }
+
+            //HANDLE API DOWN (500, 502, 503)
+            if (error.response.status >= 500) {
+                alert("💣 Server temporarily down! Try after some time.");
+            }
+
+            return Promise.reject(error);
+        }
+    );
+
+
+
+
+8. CUSTOM ERROR MESSAGES BASED ON ENDPOINT
+
+->You can detect API path:
+    if (error.config.url.includes("/posts")) {
+        alert("Post API failed!");
+    }
+
+
+
+
+9. Params
+
+->Used for search, filter, pagination, sorting, etc
+
+->These are values added after ? in the URL to send data in the URL
+
+->ttps://jsonplaceholder.typicode.com?page=2&limit=10
+
+✔ To do Pagination
+    ?page=1&limit=10
+
+✔ To do Sorting
+    ?sortBy=date&order=desc
+
+✔ To do Searching
+    ?search=iphone
+
+✔ To do Filtering
+    ?category=mobile&price<1000
+
+
+🔥 Token refresh auto logic
+🔥 Global error handling
+🔥 Retry failed requests
+🔥 Upload file with axios
+🔥 Abort controller (cancel request)
+🔥 Pagination + infinite scroll
