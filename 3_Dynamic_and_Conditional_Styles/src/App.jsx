@@ -6,9 +6,9 @@ import Bootstrap from './Bootstrap'
 function App() {
   return (
     <>
-      {/* <Style1/>
-      <Style2/> */}
-      <Bootstrap/> {/* Style3 */}
+      {/* <Style1/> */}
+      <Style2/>
+      {/* <Bootstrap/> Style3 */}
     </>
   )
 }

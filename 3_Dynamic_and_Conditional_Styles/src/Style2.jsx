@@ -29,7 +29,7 @@ export default function Style2() {
   //   const Btn = styled.button``;   // ✅ WORKS
   //   const btn = styled.button``;   // ❌ NOT WORK
   const Btn = styled.button`
-    color: red;
+    color: ${(props)=> (props.color? props.color : 'orange')};
     width: 100px;
   `;
 
@@ -38,7 +38,8 @@ export default function Style2() {
       <Divvvvvvvvvvvvv>
         <Headingh1>Something new..</Headingh1>
         <Headingh2>Something new..</Headingh2>
-        <Btn> Click me!</Btn>
+        <Btn > Click me!</Btn>
+        <Btn color='red' > Click me!</Btn>
       </Divvvvvvvvvvvvv>
     </>
   );
