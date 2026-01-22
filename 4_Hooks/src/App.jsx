@@ -6,6 +6,7 @@ import UncontrolledComponents from "./components/UncontrolledComponents/Uncontro
 import UseActionState from "./components/UseActionState/UseActionState"
 import UseFormStatus from "./components/UseFormStatus/UseFormStatus"
 import UseId from "./components/UseId/UseId"
+import UseReducer from "./components/useReducer/useReducer"
 import UseReff from "./components/UseRef/UseReff"
 import UseTransitionHook from "./components/UseTransitionHook/UseTransitionHook"
 
@@ -22,6 +23,7 @@ function App() {
       {/* <UseId/> */}
       {/* <ContextAPI/> */}
       {/* <CstmHook/> */}
+      <UseReducer/>
     </>
   )
 }
